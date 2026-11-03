@@ -266,7 +266,7 @@ clean_iris <- clean_iris %>%
       boxplot = reglaboxplot,
       percentiles = percentiles
     ),
-    .names = "{.fn}_out"
+    .names = "{.fn}_out" #buscado en google
   ))
 clean_iris[order(clean_iris$Petal.Length, decreasing = TRUE),] # aqui se puede apreciar la tolerancia de los metodos de mas a menos (sigma<hampel<boxplot<percentiles)
 ```
