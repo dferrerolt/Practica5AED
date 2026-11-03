@@ -134,6 +134,13 @@ Nota: Puedes reemplazar los valores para cada variable del dataframe usando `mut
 ```{r Solucion ejercicio 2, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
 # DEBEMOS ELIMINAR TAMBIEN LOS VALROES IGUALES A CERO YA QUE SE TRATA DE LONGITUDES DE PARTES DE UNA FLOR. NO PUEDEN SER O
 
+dirty_iris <- dirty_iris %>%
+  mutate(across(
+    where(is.numeric),
+    function(x) ifelse(!is.finite(x) | x <= 0, NA, x)
+  ))
+
+dirty_iris[order(dirty_iris$Sepal.Width, decreasing = TRUE),] #comprobamos por ejemplo que el Inf de Sepal.Width ha desaparecido y ahora es un NA
 
 ```
 
