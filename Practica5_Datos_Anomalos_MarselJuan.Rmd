@@ -216,53 +216,39 @@ Escribe una función que detecte los outliers de un vector $x$ para cada uno de 
 ```{r}
 # Regla 3 sigma
 reglasigma <- function(x) {
-  x %>%
-    filter(if_any(
-      where(is.numeric),
-      function(x) x < mean(x, na.rm = TRUE) - 3 * sd(x, na.rm = TRUE) | x > mean(x, na.rm = TRUE) + 3 * sd(x, na.rm = TRUE)))
+  x < mean(x, na.rm = TRUE) - 3 * sd(x, na.rm = TRUE) |
+    x > mean(x, na.rm = TRUE) + 3 * sd(x, na.rm = TRUE)
 }
 
 # Identificador Hampel
-reglahampel <- function(x){
-  x %>%
-    filter(if_any(
-      where(is.numeric),
-      function(x) x < median(x, na.rm = TRUE) - 3 * mad(x, na.rm = TRUE) | x > median(x, na.rm = TRUE) + 3 * mad(x, na.rm = TRUE)))
-  }
+reglahampel <- function(x) {
+  x < median(x, na.rm = TRUE) - 3 * mad(x, na.rm = TRUE) |
+    x > median(x, na.rm = TRUE) + 3 * mad(x, na.rm = TRUE)
+}
 
 # Regla boxplot
 reglaboxplot <- function(x) {
-  x %>%
-    filter(if_any(
-      where(is.numeric),
-      function(x) {
-        x_i <- quantile(x, 0.25, na.rm = TRUE)
-        x_s <- quantile(x, 0.75, na.rm = TRUE)
+  x_i <- quantile(x, 0.25, na.rm = TRUE)
+  x_s <- quantile(x, 0.75, na.rm = TRUE)
 
-        x < x_i - 1.5 * IQR(x) | x > x_s + 1.5 * IQR(x)
-      }
-    ))
+  x < x_i - 1.5 * IQR(x, na.rm = TRUE) |
+    x > x_s + 1.5 * IQR(x, na.rm = TRUE)
 }
 
 # Percentiles
 percentiles <- function(x) {
-  x %>%
-    filter(if_any(
-      where(is.numeric),
-      function(x) {
-        p_i <- quantile(x, 0.05, na.rm = TRUE)
-        p_s <- quantile(x, 0.95, na.rm = TRUE)
+  p_i <- quantile(x, 0.05, na.rm = TRUE)
+  p_s <- quantile(x, 0.95, na.rm = TRUE)
 
-        x < p_i | x > p_s
-      }
-    ))
+  x < p_i | x > p_s
 }
 
-reglasigma(clean_iris)
-reglahampel(clean_iris)
-reglaboxplot(clean_iris)
-percentiles(clean_iris)
 ```
+
+```{r}
+reglasigma(clean_iris$Petal.Length)
+```
+
 
 ## Ejercicio 6: Detección de outliers
 
@@ -271,8 +257,18 @@ Nota: podría extenderse la aplicación a todas las variables numéricas usando 
 
 ```{r Solucion ejercicio 6, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
 
-
-
+clean_iris <- clean_iris %>%
+  mutate(across(
+    Petal.Length,
+    list(
+      sigma = reglasigma,
+      hampel = reglahampel,
+      boxplot = reglaboxplot,
+      percentiles = percentiles
+    ),
+    .names = "{.fn}_out"
+  ))
+clean_iris[order(clean_iris$Petal.Length, decreasing = TRUE),] # aqui se puede apreciar la tolerancia de los metodos de mas a menos (sigma<hampel<boxplot<percentiles)
 ```
 
 ## Ejercicio 7: Comparativa de los métodos de detección de outliers
@@ -283,7 +279,10 @@ En los métodos de detección de outliers analizados, examina los resultados com
   * Los valores etiquetados como outliers (ordenados de menor a mayor).
 
 ```{r Solucion ejercicio 7, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-
+reglasigma(clean_iris)
+reglahampel(clean_iris)
+reglaboxplot(clean_iris)
+percentiles(clean_iris)
 ```
 
 ## Ejercicio 8: Representación gráfica
