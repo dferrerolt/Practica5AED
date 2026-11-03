@@ -77,6 +77,39 @@ Inspecciona visualmente los valores del conjunto de datos (`View`) y ordena de m
 
 ```{r Solucion ejercicio 1, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
 # Medidas con valores faltantes, longitudes negativas y cero
+View(dirty_iris[order(dirty_iris$Species, decreasing = TRUE),])
+View(dirty_iris[order(dirty_iris$Petal.Width, decreasing = TRUE),])
+View(dirty_iris[order(dirty_iris$Sepal.Width, decreasing = TRUE),])
+View(dirty_iris[order(dirty_iris$Petal.Length, decreasing = TRUE),])
+View(dirty_iris[order(dirty_iris$Sepal.Length, decreasing = TRUE),])
+
+View(dirty_iris[order(dirty_iris$Species),])
+View(dirty_iris[order(dirty_iris$Petal.Width),])
+View(dirty_iris[order(dirty_iris$Sepal.Width),])
+View(dirty_iris[order(dirty_iris$Petal.Length),])
+View(dirty_iris[order(dirty_iris$Sepal.Length),])
+
+# --- Valores sospechosos (ordenados de menor a mayor) ---
+
+# Sepal.Length = 0.0: valor que no tiene sentido; además, presenta Sepal.Width = NA,
+# cuando lo lógico sería que ambos valores estuvieran ausentes o fueran coherentes.
+
+# Petal.Length = 0: valor sospechoso, ya que resulta extraño en comparación con el resto de las muestras.
+
+# Sepal.Width = -1: valor imposible, puesto que una anchura no puede ser negativa.
+
+
+# --- Valores sospechosos (ordenados de mayor a menor) ---
+
+# Sepal.Length = 73 y 49: parecen posibles outliers, ya que son valores desproporcionados
+# respecto al resto de observaciones.
+
+# Sepal.Width: aparecen valores extremadamente elevados, que también parecen outliers.
+# Lo mismo ocurre con las demás variables de esas mismas muestras.
+
+# Petal.Length = 63 y 23: parecen posibles outliers por su magnitud respecto al resto de datos.
+
+# Petal.Width: aparece un valor Inf, que no es válido como medida de una longitud finita.
 
 ```
 
