@@ -279,10 +279,13 @@ En los métodos de detección de outliers analizados, examina los resultados com
   * Los valores etiquetados como outliers (ordenados de menor a mayor).
 
 ```{r Solucion ejercicio 7, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
-reglasigma(clean_iris)
-reglahampel(clean_iris)
-reglaboxplot(clean_iris)
-percentiles(clean_iris)
+sum(reglasigma(clean_iris$Petal.Length))
+sum(reglahampel(clean_iris$Petal.Length))
+sum(reglaboxplot(clean_iris$Petal.Length))
+sum(percentiles(clean_iris$Petal.Length))
+
+#al ser percentile el mas restrictivo, tiene sentido que todos los demás esten contenidos en este
+sort(clean_iris$Petal.Length[clean_iris$percentiles_out],decreasing = FALSE)
 ```
 
 ## Ejercicio 8: Representación gráfica
@@ -292,6 +295,28 @@ Representa gráficamente los datos de `Petal.Length` (distribución de puntos en
 Nota: usa en `geom_point` con la opción `position='jitter'` para mejorar la legibilidad del gráfico.
 
 ```{r Solucion ejercicio 8, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
+library(tidyverse)
+
+clean_iris %>%
+  select(Petal.Length, ends_with("_out")) %>% #cogemos todos los valores de todas los metodos en clean
+  pivot_longer(
+    cols = ends_with("_out"),
+    names_to = "Metodo", #hay 4 nombres que los pasaremos a var Metodo, mas tarde será factor
+    values_to = "Outlier" #valores T o F
+  ) %>%
+  mutate(
+    Metodo = factor(Metodo),
+    Tipo = ifelse(Outlier, "Outlier", "Típico") #si es true es oulier, tipico en caso contrario
+  ) %>%
+  ggplot(aes(x = Metodo, y = Petal.Length, color = Tipo)) +
+  geom_point(position = "jitter", alpha = 0.7) +
+  labs(
+    title = "Outliers en Petal.Length",
+    x = "Metodo",
+    y = "Petal.Length",
+    color = "Tipo de dato"
+  ) +
+  theme_minimal()
 
 ```
 
