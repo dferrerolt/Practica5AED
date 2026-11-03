@@ -89,6 +89,8 @@ View(dirty_iris[order(dirty_iris$Sepal.Width),])
 View(dirty_iris[order(dirty_iris$Petal.Length),])
 View(dirty_iris[order(dirty_iris$Sepal.Length),])
 
+#Por lo general no tiene sentido que una muestra tenga alguna de las dos medidas con el mismo primer nombre (Petal, Sepal) que una tenga medida y que la otra no
+
 # --- Valores sospechosos (ordenados de menor a mayor) ---
 
 # Sepal.Length = 0.0: valor que no tiene sentido; además, presenta Sepal.Width = NA,
@@ -96,7 +98,7 @@ View(dirty_iris[order(dirty_iris$Sepal.Length),])
 
 # Petal.Length = 0: valor sospechoso, ya que resulta extraño en comparación con el resto de las muestras.
 
-# Sepal.Width = -1: valor imposible, puesto que una anchura no puede ser negativa.
+# Sepal.Width = -1 y 0: valor imposible, puesto que una anchura no puede ser negativa.
 
 
 # --- Valores sospechosos (ordenados de mayor a menor) ---
