@@ -151,7 +151,13 @@ dirty_iris[order(dirty_iris$Sepal.Width, decreasing = TRUE),] #comprobamos por e
   * Emplea después la función `na.omit` para quedarnos solo con las filas con datos completos en un nuevo data frame `clean_iris`.
 
 ```{r Solucion ejercicio 3, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
+sum(complete.cases(dirty_iris)) #solo hay 92 filas completas
+clean_iris <- na.omit(dirty_iris)
 
+nrow(dirty_iris) # de 150 filas
+nrow(clean_iris) # pasamos a las 92 comentadas
+
+clean_iris #se puede compribar que no hay ningun NA
 ```
 
 # Detección de outliers univariante
