@@ -179,6 +179,25 @@ Hazlo para el data frame con observaciones completas `clean_iris` (que no tiene 
 
 ```{r , include = TRUE}
 
+clean_iris %>%
+  summarise(across(
+    where(is.numeric),
+    list(
+      media = function(x) mean(x, na.rm=TRUE),
+      madm = function(x) mad(x, na.rm=TRUE),
+      iqr= function(x) IQR(x, na.rm=TRUE)
+    )))
+
+dirty_iris %>%
+  summarise(across(
+    where(is.numeric),
+    list(
+      media = function(x) mean(x, na.rm=TRUE),
+      madm = function(x) mad(x, na.rm=TRUE),
+      iqr= function(x) IQR(x, na.rm=TRUE)
+    )))
+#ambos resultados cson diferentes, pero recordemos que el dirty tenia filas que tenia algunas filas con variables =NA, por lo que no difieren con el clean (p.ej Sepal.Length_madm, Sepal.Length_iqr)
+
 ```
 
 
